@@ -102,13 +102,8 @@ var OrderStore = /** @class */ (function () {
                         return [4 /*yield*/, database_1["default"].connect()];
                     case 1:
                         conn = _a.sent();
-                        sql = "INSERT INTO orders (user_id, status, product_id, quantity) VALUES($1, $2, $3, $4) RETURNING *";
-                        return [4 /*yield*/, conn.query(sql, [
-                                o.user_id,
-                                o.status,
-                                o.product_id,
-                                o.quantity,
-                            ])];
+                        sql = "INSERT INTO orders (user_id, status) VALUES($1, $2) RETURNING *";
+                        return [4 /*yield*/, conn.query(sql, [o.user_id, o.status])];
                     case 2:
                         result = _a.sent();
                         order = result.rows[0];
@@ -122,9 +117,38 @@ var OrderStore = /** @class */ (function () {
             });
         });
     };
+    OrderStore.prototype.createOrderProduct = function (newOrderProduct) {
+        return __awaiter(this, void 0, void 0, function () {
+            var conn, sql, result, orderProduct, err_4;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, database_1["default"].connect()];
+                    case 1:
+                        conn = _a.sent();
+                        sql = "INSERT INTO product_order (product_id, order_id, quantity) VALUES($1, $2, $3) RETURNING *";
+                        return [4 /*yield*/, conn.query(sql, [
+                                newOrderProduct.product_id,
+                                newOrderProduct.order_id,
+                                newOrderProduct.quantity,
+                            ])];
+                    case 2:
+                        result = _a.sent();
+                        orderProduct = result.rows[0];
+                        conn.release();
+                        return [2 /*return*/, orderProduct];
+                    case 3:
+                        err_4 = _a.sent();
+                        throw new Error("Cannot create order product: ".concat(err_4));
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
     OrderStore.prototype.ordersByUser = function (userId) {
         return __awaiter(this, void 0, void 0, function () {
-            var conn, sql, result, err_4;
+            var conn, sql, result, err_5;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -139,8 +163,8 @@ var OrderStore = /** @class */ (function () {
                         conn.release();
                         return [2 /*return*/, result.rows];
                     case 3:
-                        err_4 = _a.sent();
-                        throw new Error("Cannot get orders for user ".concat(userId, ": ").concat(err_4));
+                        err_5 = _a.sent();
+                        throw new Error("Cannot get orders for user ".concat(userId, ": ").concat(err_5));
                     case 4: return [2 /*return*/];
                 }
             });

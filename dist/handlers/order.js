@@ -47,7 +47,7 @@ var store = new Order_1.OrderStore();
 var orderRouter = express_1["default"].Router();
 var productStore = new Product_1.ProductStore();
 var create = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, product_id, quantity, product, newOrder, order, err_1;
+    var _a, product_id, quantity, product, newOrder, order, newOrderProduct, orderProduct, err_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -62,24 +62,31 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
                 }
                 _b.label = 2;
             case 2:
-                _b.trys.push([2, 4, , 5]);
+                _b.trys.push([2, 5, , 6]);
                 newOrder = {
                     //@ts-ignore
                     user_id: req.user.user.id,
-                    status: "active",
-                    product_id: product_id,
-                    quantity: quantity
+                    status: "active"
                 };
                 return [4 /*yield*/, store.create(newOrder)];
             case 3:
                 order = _b.sent();
-                res.json(order);
-                return [3 /*break*/, 5];
+                newOrderProduct = {
+                    order_id: Number(order.id),
+                    product_id: product_id,
+                    quantity: quantity
+                };
+                return [4 /*yield*/, store.createOrderProduct(newOrderProduct)];
             case 4:
+                orderProduct = _b.sent();
+                res.json({ order: order, orderProduct: orderProduct });
+                return [3 /*break*/, 6];
+            case 5:
                 err_1 = _b.sent();
+                console.log(err_1);
                 res.status(500).json(err_1);
-                return [3 /*break*/, 5];
-            case 5: return [2 /*return*/];
+                return [3 /*break*/, 6];
+            case 6: return [2 /*return*/];
         }
     });
 }); };

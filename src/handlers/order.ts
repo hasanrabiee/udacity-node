@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import authMiddleware from "../middleware/auth";
-import { Order, OrderStore } from "../models/Order";
+import { Order, OrderProduct, OrderStore } from "../models/Order";
 import { ProductStore } from "../models/Product";
 
 const store = new OrderStore();
@@ -21,13 +21,19 @@ const create = async (req: Request, res: Response) => {
       //@ts-ignore
       user_id: req.user.user.id,
       status: "active",
-      product_id,
-      quantity,
     };
 
     const order = await store.create(newOrder);
-    res.json(order);
+
+    const newOrderProduct: OrderProduct = {
+      order_id: Number(order.id),
+      product_id,
+      quantity,
+    };
+    const orderProduct = await store.createOrderProduct(newOrderProduct);
+    res.json({ order, orderProduct });
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 };

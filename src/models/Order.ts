@@ -4,8 +4,12 @@ export type Order = {
   id?: number;
   user_id: string;
   status: string;
-  quantity: number;
+};
+
+export type OrderProduct = {
   product_id: number;
+  order_id: number;
+  quantity: number;
 };
 
 export class OrderStore {
@@ -37,18 +41,31 @@ export class OrderStore {
     try {
       const conn = await db.connect();
       const sql =
-        "INSERT INTO orders (user_id, status, product_id, quantity) VALUES($1, $2, $3, $4) RETURNING *";
-      const result = await conn.query(sql, [
-        o.user_id,
-        o.status,
-        o.product_id,
-        o.quantity,
-      ]);
+        "INSERT INTO orders (user_id, status) VALUES($1, $2) RETURNING *";
+      const result = await conn.query(sql, [o.user_id, o.status]);
       const order = result.rows[0];
       conn.release();
       return order;
     } catch (err) {
       throw new Error(`Cannot create order: ${err}`);
+    }
+  }
+
+  async createOrderProduct(newOrderProduct: OrderProduct): Promise<Order> {
+    try {
+      const conn = await db.connect();
+      const sql =
+        "INSERT INTO product_order (product_id, order_id, quantity) VALUES($1, $2, $3) RETURNING *";
+      const result = await conn.query(sql, [
+        newOrderProduct.product_id,
+        newOrderProduct.order_id,
+        newOrderProduct.quantity,
+      ]);
+      const orderProduct = result.rows[0];
+      conn.release();
+      return orderProduct;
+    } catch (err) {
+      throw new Error(`Cannot create order product: ${err}`);
     }
   }
 

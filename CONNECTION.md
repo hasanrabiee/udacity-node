@@ -1,0 +1,27 @@
+## Database connection
+
+database connection parameters are same as database.json file
+
+```
+
+{
+    "dev": {
+      "driver": "pg",
+      "user": "postgres",
+      "password": "your_db_password",
+      "host": "0.0.0.0",
+      "database": "store",
+      "port": 5432
+    },
+    "test": {
+      "driver": "pg",
+      "user": "your_db_user",
+      "password": "your_db_password",
+      "host": "localhost",
+      "database": "storefront_test",
+      "port": 5432
+    }
+  }
+
+
+```
