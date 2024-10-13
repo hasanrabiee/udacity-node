@@ -9,10 +9,10 @@
     },
     "test": {
       "driver": "pg",
-      "user": "your_db_user",
+      "user": "postgres",
       "password": "your_db_password",
       "host": "localhost",
-      "database": "storefront_test",
+      "database": "store_test",
       "port": 5432
     }
   }

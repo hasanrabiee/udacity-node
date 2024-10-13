@@ -65,7 +65,7 @@ const authenticate = async (req: Request, res: Response) => {
 
 userRouter.get("/users", authMiddleware, index);
 userRouter.get("/users/:id", authMiddleware, show);
-userRouter.post("/users", authMiddleware, create);
+userRouter.post("/users", create);
 userRouter.post("/users/authenticate", authenticate);
 
 export default userRouter;

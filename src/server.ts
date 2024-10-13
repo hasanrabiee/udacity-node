@@ -4,7 +4,7 @@ import productRouter from "./handlers/products";
 import userRouter from "./handlers/user";
 import orderRouter from "./handlers/order";
 
-const app: express.Application = express();
+export const app: express.Application = express();
 const address: string = "0.0.0.0:3000";
 
 app.use(bodyParser.json());
